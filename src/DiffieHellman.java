@@ -3,15 +3,17 @@ import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.Scanner;
 
-
 public class DiffieHellman {
-
     public static void main(String[] args){
         Data data = new Data();
         DiffieHellman diffieHellman = new DiffieHellman();
 
-        diffieHellman.createSafePrimeNumber(20,data);
+        diffieHellman.createSafePrimeNumber(2,data);
+        diffieHellman.start(data);
+        diffieHellman.result(data);
     }
+
+
 
     /**
      * 求DH安全大素数P
@@ -21,6 +23,7 @@ public class DiffieHellman {
 
         SecureRandom rnd = new SecureRandom();//强制随机
         boolean temp1,temp2;
+
         do {
             BigInteger Q = BigInteger.probablePrime(length, rnd);//随机选取素数Q
 
@@ -32,8 +35,11 @@ public class DiffieHellman {
             //
             temp2 = P.gcd(BigInteger.valueOf(2).pow(P.subtract(BigInteger.ONE).divide(Q).intValue()).subtract(BigInteger.ONE)) == BigInteger.ONE;
             if(temp1&&temp2){
+                System.out.println("P="+P);
                 data.setP(P);
                 data.setA(this.findRootNumber(QQ,P));
+                System.out.println("find");
+                break;
             }
         }while (true);
 
@@ -58,6 +64,7 @@ public class DiffieHellman {
             R = R.add(two);//R=R+2
         }
         while (!(a.pow(two.multiply(R).multiply(Q).intValue())==i.mod(QQ))&&a.pow(two.multiply(R).intValue()).subtract(i).gcd(QQ)==i);
+        System.out.println(QQ);
         return QQ;
     }
 
@@ -74,6 +81,7 @@ public class DiffieHellman {
             l = rnd.nextInt(Q.multiply(BigInteger.valueOf(2)).subtract(BigInteger.ONE).intValue());
         }
         BigInteger g = BigInteger.valueOf(2).pow(l).mod(P);
+
         return g;
     }
 
@@ -100,9 +108,40 @@ public class DiffieHellman {
     }
 
     public void start(Data data){
-        data.setPrivateKeyA(this.createPrivateKeyA());
+        data.setPrivateKeyA(this.createPrivateKeyA());//密钥
         data.setPrivateKeyB(this.createPrivateKeyB());
 
+        data.setPublicKeyA(publicKey(data.getA(),data.getSecretKeyA(),data.getP()));//公钥
+        data.setPublicKeyB(publicKey(data.getA(),data.getSecretKeyB(),data.getP()));
+
+    }
+
+    /**
+     * 计算公钥
+     * @param P 安全大素数P
+     * @param A 本原根A
+     * @param secret 密钥
+     * **/
+    public BigInteger publicKey(BigInteger A,int secret,BigInteger P){
+        BigInteger publicK = A.pow(secret).mod(P);
+        return publicK;
+    }
+
+    /**
+     * 计算加密密钥
+     * @param publicK 公钥
+     * @param secret 密钥
+     * @param P 安全大素数
+     * **/
+    public BigInteger secretKey(BigInteger publicK,int secret,BigInteger P){
+        BigInteger K = publicK.pow(secret).mod(P);
+        return K;
+    }
+
+    public void result(Data data){
+        System.out.println("最后的结果：");
+        System.out.println("A求出的："+secretKey(data.getPublicKeyA(),data.getPrivateKeyA(),data.getP()));
+        System.out.println("B求出的："+secretKey(data.getPublicKeyB(),data.getPrivateKeyB(),data.getP()));
     }
 
 

@@ -7,8 +7,8 @@ public class Data {
     private BigInteger a;//本原根a
     private int PrivateKeyA;//A的密钥
     private int PrivateKeyB;//B的密钥
-    private int PublicKeyA;//A的公钥
-    private int PublicKeyB;//B的公钥
+    private BigInteger PublicKeyA;//A的公钥
+    private BigInteger PublicKeyB;//B的公钥
     private int SecretKeyA;//A的加密密钥
     private int SecretKeyB;//A的加密密钥
 
@@ -44,19 +44,19 @@ public class Data {
         this.PrivateKeyB = PrivateKeyB;
     }
 
-    public int getPublicKeyA(){
+    public BigInteger getPublicKeyA(){
         return this.PublicKeyA;
     }
 
-    public void setPublicKeyA(int PublicKeyA){
+    public void setPublicKeyA(BigInteger PublicKeyA){
         this.PublicKeyA = PublicKeyA;
     }
 
-    public int getPublicKeyB(){
+    public BigInteger getPublicKeyB(){
         return this.PublicKeyB;
     }
 
-    public void setPublicKeyB(int PublicKeyB){
+    public void setPublicKeyB(BigInteger PublicKeyB){
         this.PublicKeyB = PublicKeyB;
     }
 
