@@ -1,8 +1,10 @@
+import java.math.BigInteger;
+
 public class Data {
 
 
-    private int p;//素数p
-    private int a;//本原根a
+    private BigInteger p;//素数p
+    private BigInteger a;//本原根a
     private int PrivateKeyA;//A的密钥
     private int PrivateKeyB;//B的密钥
     private int PublicKeyA;//A的公钥
@@ -10,19 +12,19 @@ public class Data {
     private int SecretKeyA;//A的加密密钥
     private int SecretKeyB;//A的加密密钥
 
-    public void setP(int p){
+    public void setP(BigInteger p){
         this.p = p;
     }
 
-    public int getP(){
+    public BigInteger getP(){
         return this.p;
     }
 
-    public void setA(int a){
+    public void setA(BigInteger a){
         this.a = a;
     }
 
-    public int getA(){
+    public BigInteger getA(){
         return this.a;
     }
 
