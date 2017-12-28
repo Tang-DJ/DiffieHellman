@@ -12,7 +12,7 @@ public class DiffieHellman {
         Data data = new Data();
         DiffieHellman diffieHellman = new DiffieHellman();
 
-        System.out.println(diffieHellman.one());
+        System.out.println(diffieHellman.creatPrimeNumber());
 
         /*diffieHellman.isPrimitiveRoot(71,2);
 */
@@ -132,11 +132,10 @@ public class DiffieHellman {
     }
 
     /**
-     * 生成大素数
-     * 大素数 q
+     * 生成大素数q
      * 需要输入一个素数Q
      * **/
-    public BigInteger one(){
+    public BigInteger creatPrimeNumber(){
         SecureRandom rnd = new SecureRandom();//强制随机
 
         BigInteger a = BigInteger.valueOf(2);//基a

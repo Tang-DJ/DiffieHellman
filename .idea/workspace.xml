@@ -2,10 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="97792d19-2254-42ba-b00f-17697d69359e" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/out/production/DiffieHellman/Data.class" afterPath="$PROJECT_DIR$/out/production/DiffieHellman/Data.class" />
-      <change beforePath="$PROJECT_DIR$/out/production/DiffieHellman/DiffieHellman.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/DiffieHellman/UserA.class" afterPath="$PROJECT_DIR$/out/production/DiffieHellman/UserA.class" />
       <change beforePath="$PROJECT_DIR$/src/DiffieHellman.java" afterPath="$PROJECT_DIR$/src/DiffieHellman.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -21,8 +17,8 @@
       <file leaf-file-name="DiffieHellman.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/DiffieHellman.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="468">
-              <caret line="18" column="43" lean-forward="true" selection-start-line="18" selection-start-column="43" selection-end-line="18" selection-end-column="43" />
+            <state relative-caret-position="-2764">
+              <caret line="17" column="2" lean-forward="true" selection-start-line="17" selection-start-column="2" selection-end-line="17" selection-end-column="2" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -386,12 +382,12 @@
       <workItem from="1514268574332" duration="24681000" />
       <workItem from="1514352539661" duration="548000" />
       <workItem from="1514378390450" duration="10151000" />
-      <workItem from="1514431198227" duration="2418000" />
+      <workItem from="1514431198227" duration="2543000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="37798000" />
+    <option name="totallyTimeSpent" value="37923000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-9" y="-9" width="1938" height="1060" extended-state="6" />
@@ -802,8 +798,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/DiffieHellman.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="468">
-          <caret line="18" column="43" lean-forward="true" selection-start-line="18" selection-start-column="43" selection-end-line="18" selection-end-column="43" />
+        <state relative-caret-position="-2764">
+          <caret line="17" column="2" lean-forward="true" selection-start-line="17" selection-start-column="2" selection-end-line="17" selection-end-column="2" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
