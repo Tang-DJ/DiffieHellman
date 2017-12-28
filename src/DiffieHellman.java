@@ -12,10 +12,10 @@ public class DiffieHellman {
         Data data = new Data();
         DiffieHellman diffieHellman = new DiffieHellman();
 
+        System.out.println(diffieHellman.one());
 
-
-        diffieHellman.isPrimitiveRoot(71,2);
-
+        /*diffieHellman.isPrimitiveRoot(71,2);
+*/
         /*diffieHellman.SecretSwapNext();*/
     }
 
@@ -44,9 +44,6 @@ public class DiffieHellman {
         return p;*/
 
         //随机产生大素数
-
-
-
         return 0;
 
     }
@@ -90,8 +87,13 @@ public class DiffieHellman {
         return true;
     }
 
-    /*public void SecretSwapNext(){
-        try{
+    public void SecretSwapNext(){
+        int bitLength = 20;//位数里的素数
+        SecureRandom rnd = new SecureRandom();
+        BigInteger p = BigInteger.probablePrime(bitLength, rnd);//获取一个随机大素数，返回可能是合数的概率不超过2的负100次方
+        System.out.println("随机大素数="+p);
+
+        /*try{
             int bitLength = 512;
             SecureRandom rnd = new SecureRandom();
             System.out.println("\nBitLength:"+bitLength);
@@ -126,8 +128,37 @@ public class DiffieHellman {
         }
         catch (Exception a){
             System.out.println(a);
+        }*/
+    }
+
+    /**
+     * 生成大素数
+     * 大素数 q
+     * 需要输入一个素数Q
+     * **/
+    public BigInteger one(){
+        SecureRandom rnd = new SecureRandom();//强制随机
+
+        BigInteger a = BigInteger.valueOf(2);//基a
+        BigInteger Q = BigInteger.probablePrime(10, rnd);//素数Q
+        BigInteger i = BigInteger.ONE;//1
+        BigInteger two = BigInteger.valueOf(2);
+        BigInteger QQ;
+        int r = rnd.nextInt(100);//获得一个bound以内的随机数
+        BigInteger R = BigInteger.valueOf(r).multiply(two);//随机选取偶数
+
+        do{
+            QQ = two.multiply(R).multiply(Q).add(i);//QQ=2*R*Q+1
+            R = R.add(two);//R=R+2
         }
-    }*/
+        while (!(a.pow(two.multiply(R).multiply(Q).intValue())==i.mod(QQ))&&a.pow(two.multiply(R).intValue()).subtract(i).gcd(QQ)==i);
+        return QQ;
+    }
+
+
+
+
+
 
 
 }
