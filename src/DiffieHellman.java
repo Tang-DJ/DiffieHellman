@@ -20,7 +20,7 @@ public class DiffieHellman {
         Scanner input = new Scanner(System.in);
         int chose = 0;
         while(chose!=3){
-            System.out.println("进入菜单，请输入您的选择：(1~3)");
+            System.out.println("\n进入菜单，请输入您的选择：(1~3)");
             System.out.println("1.自行输入素数以及素数的本原根");
             System.out.println("2.随机获得素数以及素数的本原根");
             System.out.println("3.退出系统");
@@ -32,6 +32,7 @@ public class DiffieHellman {
                     this.start(data);
                     break;
                 case 2:
+                    this.getPandA(data);
                     this.start(data);
                     break;
                 case 3:
@@ -65,7 +66,7 @@ public class DiffieHellman {
             System.out.print("该数不是素数"+privateNum+"的一个本原根!请输入该素数的一个本原根：");
             rootNum = input.nextInt();
         }
-        System.out.println("输入成功！\n素数为"+privateNum+",该素数的本原根为"+rootNum);
+        System.out.println("输入成功！\n素数P="+privateNum+",该素数的本原根A="+rootNum);
         data.setP(BigInteger.valueOf(privateNum));
         data.setA(BigInteger.valueOf(rootNum));
 
@@ -109,8 +110,21 @@ public class DiffieHellman {
     /**
      * 随机获得一个素数以及其一个本原根
      * **/
-    public void getPandA(){
+    public void getPandA(Data data){
         SecureRandom rd = new SecureRandom();
+        BigInteger primeNum =BigInteger.probablePrime(5,rd);//10bit，可以更改
+        int num = 0;
+        int[] temp = new int[primeNum.intValue()];
+        for(int i = 0;i<primeNum.intValue();i++){
+            if(isRootNumber(BigInteger.valueOf(i),primeNum)){
+                temp[num] = i;
+                num++;
+            }
+        }
+        int rootNum = temp[rd.nextInt(num)];
+        data.setP(primeNum);
+        data.setA(BigInteger.valueOf(rootNum));
+        System.out.println("随机生成素数P="+ primeNum +",随机生成"+primeNum+"的本原根A="+rootNum);
 
     }
 
@@ -119,13 +133,13 @@ public class DiffieHellman {
      */
     public void createPrivateKeyAB(Data data){
         Scanner input = new Scanner(System.in);
-        System.out.println("A用户您好，请输入您的秘钥");
+        System.out.println("\nA用户您好，请输入您的秘钥");
         int PrivateKeyA = input.nextInt();
-        System.out.println("您的秘钥为："+PrivateKeyA);
+        System.out.println("A的秘钥为："+PrivateKeyA);
 
-        System.out.println("B用户您好，请输入您的秘钥");
+        System.out.println("\nB用户您好，请输入您的秘钥");
         int PrivateKeyB = input.nextInt();
-        System.out.println("您的秘钥为："+PrivateKeyB);
+        System.out.println("B的秘钥为："+PrivateKeyB);
 
         data.setPrivateKeyA(PrivateKeyA);
         data.setPrivateKeyB(PrivateKeyB);
