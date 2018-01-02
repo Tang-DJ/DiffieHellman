@@ -1,4 +1,5 @@
 
+
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.Scanner;
@@ -8,112 +9,143 @@ public class DiffieHellman {
         Data data = new Data();
         DiffieHellman diffieHellman = new DiffieHellman();
 
-        diffieHellman.createSafePrimeNumber(2,data);
-        diffieHellman.start(data);
-        diffieHellman.result(data);
+        System.out.println("欢迎使用DiffieHellman算法系统！");
+        diffieHellman.menu(data);
     }
 
-
-
     /**
-     * 求DH安全大素数P
-     * @param length 目标素数长度
+     * 菜单选择
      * **/
-    public void createSafePrimeNumber(int length,Data data){
+    public void menu(Data data){
+        Scanner input = new Scanner(System.in);
+        int chose = 0;
+        while(chose!=3){
+            System.out.println("进入菜单，请输入您的选择：(1~3)");
+            System.out.println("1.自行输入素数以及素数的本原根");
+            System.out.println("2.随机获得素数以及素数的本原根");
+            System.out.println("3.退出系统");
 
-        SecureRandom rnd = new SecureRandom();//强制随机
-        boolean temp1,temp2;
-
-        do {
-            BigInteger Q = BigInteger.probablePrime(length, rnd);//随机选取素数Q
-
-            BigInteger QQ = createPrimeNumber(Q);
-            BigInteger P = BigInteger.valueOf(2).multiply(QQ).add(BigInteger.ONE);//P=2*QQ+1
-
-            //2的p-1次方                                                      //1modP
-            temp1 = BigInteger.valueOf(2).pow(P.subtract(BigInteger.ONE).intValue()) == BigInteger.ONE.mod(P);
-            //
-            temp2 = P.gcd(BigInteger.valueOf(2).pow(P.subtract(BigInteger.ONE).divide(Q).intValue()).subtract(BigInteger.ONE)) == BigInteger.ONE;
-            if(temp1&&temp2){
-                System.out.println("P="+P);
-                data.setP(P);
-                data.setA(this.findRootNumber(QQ,P));
-                System.out.println("find");
-                break;
+            chose = input.nextInt();
+            switch (chose){
+                case 1:
+                    this.writePandA(data);
+                    this.start(data);
+                    break;
+                case 2:
+                    this.start(data);
+                    break;
+                case 3:
+                    System.out.println("退出系统成功！");
+                    break;
+                default:
+                    System.out.println("输入不合法，请重新输入");
+                    break;
             }
-        }while (true);
-
-    }
-
-    /**
-     * 生成大素数q
-     * @param Q 随机素数Q
-     * **/
-    public BigInteger createPrimeNumber(BigInteger Q){
-        SecureRandom rnd = new SecureRandom();//强制随机
-
-        BigInteger a = BigInteger.valueOf(2);//基a
-        BigInteger i = BigInteger.ONE;//1
-        BigInteger two = BigInteger.valueOf(2);
-        BigInteger QQ;
-        int r = rnd.nextInt(100);//获得一个bound以内的随机数
-        BigInteger R = BigInteger.valueOf(r).multiply(two);//随机选取偶数
-
-        do{
-            QQ = two.multiply(R).multiply(Q).add(i);//QQ=2*R*Q+1
-            R = R.add(two);//R=R+2
         }
-        while (!(a.pow(two.multiply(R).multiply(Q).intValue())==i.mod(QQ))&&a.pow(two.multiply(R).intValue()).subtract(i).gcd(QQ)==i);
-        System.out.println(QQ);
-        return QQ;
+        input.close();
+
     }
 
     /**
-     * 生成本原根
+     * 输入安全大素数P,A
+     * **/
+    public void writePandA(Data data){
+        Scanner input = new Scanner(System.in);
+        int privateNum;//素数
+        int rootNum;//本原根
+        System.out.print("请输入一个素数:");
+        privateNum = input.nextInt();
+        while(!isPrime(privateNum)){
+            System.out.print("该数不是素数，请输入一个素数:");
+            privateNum = input.nextInt();
+        }
+        System.out.print("输入成功！\n请输入素数"+privateNum+"的一个本原根：");
+        rootNum = input.nextInt();
+        while (!isRootNumber(BigInteger.valueOf(privateNum),BigInteger.valueOf(rootNum))){
+            System.out.print("该数不是素数"+privateNum+"的一个本原根!请输入该素数的一个本原根：");
+            rootNum = input.nextInt();
+        }
+        System.out.println("输入成功！\n素数为"+privateNum+",该素数的本原根为"+rootNum);
+        data.setP(BigInteger.valueOf(privateNum));
+        data.setA(BigInteger.valueOf(rootNum));
+
+    }
+
+    /**
+     * 判断是否是素数
+     * @param P 输入素数
+     * **/
+    public boolean isPrime(int P){
+        if(P < 2)
+            return false;
+        if(P == 2)
+            return true;
+        if(P%2==0)
+            return false;
+        for(int i = 3; i*i <= P; i += 2)
+            if(P%i == 0)
+                return false;
+        return true;
+    }
+
+    /**
+     * 判断是否是本原根
      * @param P 安全大素数
-     * @param Q 随机生成的素数
+     * @param A 本原根
      * **/
-    public BigInteger findRootNumber(BigInteger Q,BigInteger P){
-        SecureRandom rnd = new SecureRandom();//强制随机
-        int l = rnd.nextInt(Q.multiply(BigInteger.valueOf(2)).subtract(BigInteger.ONE).intValue());
-        //如果l==q就重新随机
-        while(l==Q.intValue()){
-            l = rnd.nextInt(Q.multiply(BigInteger.valueOf(2)).subtract(BigInteger.ONE).intValue());
+        public boolean isRootNumber(BigInteger A,BigInteger P){
+            BigInteger[] temp =new BigInteger[P.intValue()];
+            for(int i=0;i<P.intValue()-1;i++){
+                temp[i]= A.pow(i+1).mod(P);
+                for(int k=0;k<i;k++){
+                    if(temp[i].equals(temp[k])){
+                        return false;
+                    }
+                }
         }
-        BigInteger g = BigInteger.valueOf(2).pow(l).mod(P);
-
-        return g;
+        return true;
     }
 
     /**
-     *A输入自己的秘钥Sa
+     * 随机获得一个素数以及其一个本原根
+     * **/
+    public void getPandA(){
+        SecureRandom rd = new SecureRandom();
+
+    }
+
+    /**
+     *AB输入自己的秘钥Sa
      */
-    public int createPrivateKeyA(){
+    public void createPrivateKeyAB(Data data){
         Scanner input = new Scanner(System.in);
         System.out.println("A用户您好，请输入您的秘钥");
         int PrivateKeyA = input.nextInt();
-        input.close();
-        return PrivateKeyA;
+        System.out.println("您的秘钥为："+PrivateKeyA);
+
+        System.out.println("B用户您好，请输入您的秘钥");
+        int PrivateKeyB = input.nextInt();
+        System.out.println("您的秘钥为："+PrivateKeyB);
+
+        data.setPrivateKeyA(PrivateKeyA);
+        data.setPrivateKeyB(PrivateKeyB);
+
     }
 
     /**
-     *B输入自己的秘钥Sb
-     */
-    public int createPrivateKeyB(){
-        Scanner input = new Scanner(System.in);
-        System.out.println("B用户您好，请输入您的秘钥");
-        int PrivateKeyB = input.nextInt();
-        input.close();
-        return PrivateKeyB;
-    }
-
+     * 操作函数
+     * **/
     public void start(Data data){
-        data.setPrivateKeyA(this.createPrivateKeyA());//密钥
-        data.setPrivateKeyB(this.createPrivateKeyB());
+        this.createPrivateKeyAB(data);//密钥
 
-        data.setPublicKeyA(publicKey(data.getA(),data.getSecretKeyA(),data.getP()));//公钥
-        data.setPublicKeyB(publicKey(data.getA(),data.getSecretKeyB(),data.getP()));
+        data.setPublicKeyA(publicKey(data.getA(),data.getPrivateKeyA(),data.getP()));//公钥
+        System.out.println("A公钥为"+data.getPublicKeyA());
+        data.setPublicKeyB(publicKey(data.getA(),data.getPrivateKeyB(),data.getP()));
+        System.out.println("B公钥为"+data.getPublicKeyB());
 
+        //得到结果
+        System.out.println("A用户的秘钥："+this.secretKey(data.getPublicKeyA(),data.getSecretKeyA(),data.getP()));
+        System.out.println("B用户的秘钥："+this.secretKey(data.getPublicKeyB(),data.getSecretKeyB(),data.getP()));
     }
 
     /**
@@ -124,6 +156,7 @@ public class DiffieHellman {
      * **/
     public BigInteger publicKey(BigInteger A,int secret,BigInteger P){
         BigInteger publicK = A.pow(secret).mod(P);
+       /* System.out.println("A="+A+" p="+secret+" P="+P+" re="+publicK);*/
         return publicK;
     }
 
@@ -137,12 +170,5 @@ public class DiffieHellman {
         BigInteger K = publicK.pow(secret).mod(P);
         return K;
     }
-
-    public void result(Data data){
-        System.out.println("最后的结果：");
-        System.out.println("A求出的："+secretKey(data.getPublicKeyA(),data.getPrivateKeyA(),data.getP()));
-        System.out.println("B求出的："+secretKey(data.getPublicKeyB(),data.getPrivateKeyB(),data.getP()));
-    }
-
 
 }
