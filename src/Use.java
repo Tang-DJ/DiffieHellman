@@ -130,7 +130,7 @@ public class Use extends Application {
         gridPane.add(sushutext,1,0);
         gridPane.add(new Label("本原根"),0,1);
         gridPane.add(benyuantext,1,1);
-        gridPane.add(miyaot,0,2);
+        gridPane.add(new Label("密钥"),0,2);
         gridPane.add(miyaotext,1,2);
         gridPane.add(queding,1,3);
         gridPane.add(send,1,4);
