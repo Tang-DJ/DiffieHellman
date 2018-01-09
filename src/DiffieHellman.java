@@ -164,9 +164,9 @@ public class DiffieHellman {
 
     /**
      * 计算公钥
-     * @param P 安全大素数P
      * @param A 本原根A
      * @param secret 密钥
+     * @param P 安全大素数P
      * **/
     public BigInteger publicKey(BigInteger A,int secret,BigInteger P){
         BigInteger publicK = A.pow(secret).mod(P);
@@ -177,7 +177,7 @@ public class DiffieHellman {
     /**
      * 计算加密密钥
      * @param publicK 公钥
-     * @param secret 密钥
+     * @param secret 对方的密钥
      * @param P 安全大素数
      * **/
     public BigInteger secretKey(BigInteger publicK,int secret,BigInteger P){
