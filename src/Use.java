@@ -126,7 +126,6 @@ public class Use extends Application {
                    data.setPrivateKeyA(miyao);
                    tishi.setText("输入成功");
                    BigInteger publickey = diffieHellman.publicKey(BigInteger.valueOf(benyuan),miyao,BigInteger.valueOf(prime));
-                  /* BigInteger secritkey = diffieHellman.secretKey(publickey,miyao,BigInteger.valueOf(prime));*/
                    data.setPublicKeyA(publickey);
                    tishi.setText("发送方公钥："+publickey);
            }
@@ -272,10 +271,13 @@ public class Use extends Application {
                 int miyaoB = Integer.parseInt(miyao.getText());
 
                 BigInteger publickey = diffieHellman.publicKey(data.getA(),miyaoB,data.getP());
+                data.setPublicKeyB(publickey);
+
                 publickeyt.setText(publickey+"");
                 data.setPrivateKeyB(miyaoB);
-                BigInteger secritkeyB = diffieHellman.secretKey(data.getPublicKeyA(),data.getSecretKeyA(),data.getP());
-                BigInteger secritkeyA = diffieHellman.secretKey(data.getPublicKeyA(),data.getSecretKeyB(),data.getP());
+
+                BigInteger secritkeyB = diffieHellman.secretKey(data.getPublicKeyA(),data.getPrivateKeyB(),data.getP());
+                BigInteger secritkeyA = diffieHellman.secretKey(data.getPublicKeyB(),data.getPrivateKeyA(),data.getP());
                 data.setSecretKeyA(secritkeyA.intValue());
                 data.setSecretKeyB(secritkeyB.intValue());
                 secretA.setText("发送方加密密钥："+secritkeyA);
