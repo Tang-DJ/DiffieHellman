@@ -121,13 +121,22 @@ public class Use extends Application {
                int prime = Integer.valueOf(sushutext.getText());//素数
                int benyuan = Integer.valueOf(benyuantext.getText());//本原根
                int miyao =Integer.valueOf(miyaotext.getText());//A的密钥
-                   data.setP(BigInteger.valueOf(prime));
-                   data.setA(BigInteger.valueOf(benyuan));
-                   data.setPrivateKeyA(miyao);
-                   tishi.setText("输入成功");
-                   BigInteger publickey = diffieHellman.publicKey(BigInteger.valueOf(benyuan),miyao,BigInteger.valueOf(prime));
-                   data.setPublicKeyA(publickey);
-                   tishi.setText("发送方公钥："+publickey);
+
+                   if (!diffieHellman.isPrime(prime)){
+                       tishi.setText("该数不是素数，请输入一个素数");
+                       sushutext.clear();
+                   }else if(!diffieHellman.isRootNumber(BigInteger.valueOf(prime),BigInteger.valueOf(benyuan))){
+                       tishi.setText("该数不是素数"+prime+"的一个本原根");
+                       benyuantext.clear();
+                   }else {
+                       data.setP(BigInteger.valueOf(prime));
+                       data.setA(BigInteger.valueOf(benyuan));
+                       data.setPrivateKeyA(miyao);
+                       tishi.setText("输入成功");
+                       BigInteger publickey = diffieHellman.publicKey(BigInteger.valueOf(benyuan),miyao,BigInteger.valueOf(prime));
+                       data.setPublicKeyA(publickey);
+                       tishi.setText("发送方公钥："+publickey);
+                   }
            }
         });
 
