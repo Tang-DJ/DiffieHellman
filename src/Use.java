@@ -100,24 +100,27 @@ public class Use extends Application {
                tishi.setText("请输入素数");
            }
            else
-               if(benyuantext.getText().equals(""))
-                   tishi.setText("请输入本原根");
+               if(benyuantext.getText().equals("")){
+                   int prime = Integer.valueOf(sushutext.getText());//素数
+                   if (!diffieHellman.isPrime(prime)){
+                       tishi.setText("该数不是素数，请输入一个素数");
+                       sushutext.clear();
+                   }else tishi.setText("请输入本原根");
+               }
+
            else
-               if(miyaotext.getText().equals(""))
-                   tishi.setText("请输入私钥");
+               if(miyaotext.getText().equals("")){
+                   int prime = Integer.valueOf(sushutext.getText());//素数
+                   int benyuan = Integer.valueOf(benyuantext.getText());//本原根
+                   if(!diffieHellman.isRootNumber(BigInteger.valueOf(prime),BigInteger.valueOf(benyuan))){
+                       tishi.setText("该数不是素数"+prime+"的一个本原根");
+                       benyuantext.clear();
+                   }else tishi.setText("请输入私钥");
+               }
            else {
                int prime = Integer.valueOf(sushutext.getText());//素数
                int benyuan = Integer.valueOf(benyuantext.getText());//本原根
                int miyao =Integer.valueOf(miyaotext.getText());//A的密钥
-               if (!diffieHellman.isPrime(prime)){
-                   tishi.setText("该数不是素数，请输入一个素数");
-                   sushutext.clear();
-               }
-               else if(!diffieHellman.isRootNumber(BigInteger.valueOf(prime),BigInteger.valueOf(benyuan))){
-                   tishi.setText("该数不是素数"+prime+"的一个本原根");
-                   benyuantext.clear();
-               }
-               else{
                    data.setP(BigInteger.valueOf(prime));
                    data.setA(BigInteger.valueOf(benyuan));
                    data.setPrivateKeyA(miyao);
@@ -126,7 +129,6 @@ public class Use extends Application {
                   /* BigInteger secritkey = diffieHellman.secretKey(publickey,miyao,BigInteger.valueOf(prime));*/
                    data.setPublicKeyA(publickey);
                    tishi.setText("发送方公钥："+publickey);
-               }
            }
         });
 
@@ -178,72 +180,7 @@ public class Use extends Application {
 
         return scene;
     }
-    /**
-     * 接受方面板
-     * **/
-    public Scene getScene(Stage stage){
-        Button queding = new Button("确定");
-        Button re = new Button("返回首页");
-        Button quit = new Button("退出");
-        TextField miyao  = new TextField();
-        Label publickeyt = new Label();
-        Text secretA = new Text();
-        Text secretB = new Text();
 
-        //触发事件
-        queding.setOnAction(e->{
-            if(!miyao.getText().equals("")){
-                int miyaoB = Integer.parseInt(miyao.getText());
-
-                BigInteger publickey = diffieHellman.publicKey(data.getA(),miyaoB,data.getP());
-                publickeyt.setText(publickey+"");
-                data.setPrivateKeyB(miyaoB);
-                BigInteger secritkeyB = diffieHellman.secretKey(data.getPublicKeyA(),data.getSecretKeyA(),data.getP());
-                BigInteger secritkeyA = diffieHellman.secretKey(data.getPublicKeyA(),data.getSecretKeyB(),data.getP());
-                data.setSecretKeyA(secritkeyA.intValue());
-                data.setSecretKeyB(secritkeyB.intValue());
-                secretA.setText("发送方加密密钥："+secritkeyA);
-                secretB.setText("接受方加密密钥："+secritkeyB);
-            }
-        });
-        re.setOnAction(e->{
-            data.setP(null);
-            data.setA(null);
-            data.setPublicKeyA(null);
-            data.setPublicKeyB(null);
-            Scene scene = come(stage);
-            stage.setScene(scene);
-            stage.setTitle("Welcome");
-            stage.show();
-        });
-        quit.setOnAction(e->stage.close());
-
-        GridPane gridPane = new GridPane();
-        gridPane.add(new Label("发送方公钥："),0,0);
-        gridPane.add(new Label(data.getPublicKeyA()+""),1,0);
-        gridPane.add(new Label("素数："),0,1);
-        gridPane.add(new Label(data.getP()+""),1,1);
-        gridPane.add(new Label("本原根："),0,2);
-        gridPane.add(new Label(data.getA()+""),1,2);
-        gridPane.add(new Label("接收方私钥："),0,3);
-        gridPane.add(miyao,1,3);
-        gridPane.add(queding,2,4);
-        gridPane.add(new Label("接收方公钥："),0,5);
-        gridPane.add(publickeyt,1,5);
-
-        gridPane.add(secretA,0,6);
-        gridPane.add(secretB,0,7);
-
-
-        gridPane.add(re,2,7);
-        gridPane.add(quit,2,6);
-        gridPane.setAlignment(Pos.CENTER);
-        gridPane.setVgap(8);
-        gridPane.setHgap(4);
-
-        Scene scene = new Scene(gridPane,400,250);
-        return scene;
-    }
     /**
      * 发送方面板two
      * **/
@@ -317,4 +254,73 @@ public class Use extends Application {
         return scene;
     }
 
+    /**
+     * 接受方面板
+     * **/
+    public Scene getScene(Stage stage){
+        Button queding = new Button("确定");
+        Button re = new Button("返回首页");
+        Button quit = new Button("退出");
+        TextField miyao  = new TextField();
+        Label publickeyt = new Label();
+        Text secretA = new Text();
+        Text secretB = new Text();
+
+        //触发事件
+        queding.setOnAction(e->{
+            if(!miyao.getText().equals("")){
+                int miyaoB = Integer.parseInt(miyao.getText());
+
+                BigInteger publickey = diffieHellman.publicKey(data.getA(),miyaoB,data.getP());
+                publickeyt.setText(publickey+"");
+                data.setPrivateKeyB(miyaoB);
+                BigInteger secritkeyB = diffieHellman.secretKey(data.getPublicKeyA(),data.getSecretKeyA(),data.getP());
+                BigInteger secritkeyA = diffieHellman.secretKey(data.getPublicKeyA(),data.getSecretKeyB(),data.getP());
+                data.setSecretKeyA(secritkeyA.intValue());
+                data.setSecretKeyB(secritkeyB.intValue());
+                secretA.setText("发送方加密密钥："+secritkeyA);
+                secretB.setText("接受方加密密钥："+secritkeyB);
+            }
+        });
+        re.setOnAction(e->{
+            data.setP(null);
+            data.setA(null);
+            data.setPublicKeyA(null);
+            data.setPublicKeyB(null);
+            Scene scene = come(stage);
+            stage.setScene(scene);
+            stage.setTitle("Welcome");
+            stage.show();
+        });
+        quit.setOnAction(e->stage.close());
+
+        GridPane gridPane = new GridPane();
+        gridPane.add(new Label("发送方公钥："),0,0);
+        gridPane.add(new Label(data.getPublicKeyA()+""),1,0);
+        gridPane.add(new Label("素数："),0,1);
+        gridPane.add(new Label(data.getP()+""),1,1);
+        gridPane.add(new Label("本原根："),0,2);
+        gridPane.add(new Label(data.getA()+""),1,2);
+        gridPane.add(new Label("接收方私钥："),0,3);
+        gridPane.add(miyao,1,3);
+        gridPane.add(queding,2,4);
+        gridPane.add(new Label("接收方公钥："),0,5);
+        gridPane.add(publickeyt,1,5);
+
+        gridPane.add(secretA,0,6);
+        gridPane.add(secretB,0,7);
+
+
+        gridPane.add(re,2,7);
+        gridPane.add(quit,2,6);
+        gridPane.setAlignment(Pos.CENTER);
+        gridPane.setVgap(8);
+        gridPane.setHgap(4);
+
+        Scene scene = new Scene(gridPane,400,250);
+        return scene;
+    }
+
 }
+
+
