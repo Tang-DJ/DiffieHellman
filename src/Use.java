@@ -244,7 +244,6 @@ public class Use extends Application {
         gridPane.setVgap(8);
         gridPane.setHgap(6);
 
-
         HBox bottom = new HBox(15);
         bottom.setPadding(new Insets(15,15,40,15));
         bottom.getChildren().add(publickeyt);
